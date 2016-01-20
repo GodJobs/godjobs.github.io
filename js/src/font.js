@@ -1,10 +1,12 @@
 WebFontConfig = {
     custom: {
-        families: ["FFTisaWeb",
+        families: [
+        "FFTisaWeb",
         "FFTisaWebBold",
         "FFTisaWebItalic",
         "FFTisaWebMediumSmallCaps",
-        "FFTisaWebSmallCaps", "Nitti", "MuseoSans-300", "MuseoSans-100", "icon"],
+        "FFTisaWebSmallCaps"
+        ],
         urls: ['/fonts/embedded_fonts.css']
     }
 };

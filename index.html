@@ -47,7 +47,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="BlueDragon" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="DragonBones" type="application/atom+xml" />
 
 
 
@@ -61,12 +61,12 @@
 
 <meta name="description" content="路漫漫其修远兮，吾将上下而求索">
 <meta property="og:type" content="website">
-<meta property="og:title" content="BlueDragon">
+<meta property="og:title" content="DragonBones">
 <meta property="og:url" content="http://copyleft.me/index.html">
-<meta property="og:site_name" content="BlueDragon">
+<meta property="og:site_name" content="DragonBones">
 <meta property="og:description" content="路漫漫其修远兮，吾将上下而求索">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BlueDragon">
+<meta name="twitter:title" content="DragonBones">
 <meta name="twitter:description" content="路漫漫其修远兮，吾将上下而求索">
 
 
@@ -85,7 +85,7 @@
   };
 </script>
 
-  <title> BlueDragon </title>
+  <title> DragonBones </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="en">
@@ -116,7 +116,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">BlueDragon</span>
+      <span class="site-title">DragonBones</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -224,6 +224,116 @@
             
               
                 
+                <a class="post-title-link" href="/2016/01/21/talk-about-blockcanary/" itemprop="url">
+                  Talk about BlockCanary
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-01-21T23:00:00+08:00" content="2016-01-21">
+              2016-01-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>前一段时间在微博上有人分享了一个透明检测应用卡顿方法的文章，我并没有急着去看文章的内容，而是先自己想一想，能否很快的在头脑中给出一个类似的解决方案。当然结果是并没有，哈哈，不过很幸运的是文章的作者开源了相应的代码实现，今天自己就来好好分析学习一下。</p>
+<h1 id="u4EE3_u7801_u7ED3_u6784"><a href="#u4EE3_u7801_u7ED3_u6784" class="headerlink" title="代码结构"></a>代码结构</h1><p>首先给出代码结构，不包含其中的资源部分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">└── com</span><br><span class="line">    └── github</span><br><span class="line">        └── moduth</span><br><span class="line">            └── blockcanary</span><br><span class="line">                ├── BlockCanary.java</span><br><span class="line">                ├── BlockCanaryContext.java</span><br><span class="line">                ├── BlockListener.java</span><br><span class="line">                ├── LooperPrinter.java</span><br><span class="line">                ├── info</span><br><span class="line">                │   ├── CpuSampler.java</span><br><span class="line">                │   └── ThreadStackSampler.java</span><br><span class="line">                ├── <span class="built_in">log</span></span><br><span class="line">                │   ├── Block.java</span><br><span class="line">                │   ├── BlockCanaryInternals.java</span><br><span class="line">                │   ├── LogWriter.java</span><br><span class="line">                │   ├── PerformanceUtils.java</span><br><span class="line">                │   ├── ProcessUtils.java</span><br><span class="line">                │   └── UploadMonitorLog.java</span><br><span class="line">                └── ui</span><br><span class="line">                    ├── BlockDetailAdapter.java</span><br><span class="line">                    ├── DisplayBlockActivity.java</span><br><span class="line">                    ├── DisplayLeakConnectorView.java</span><br><span class="line">                    ├── LeakCanaryUi.java</span><br><span class="line">                    └── MoreDetailsView.java</span><br></pre></td></tr></table></figure>
+<p>层次结构很清晰，只要明白了实现原理之后<a href="http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/" target="_blank" rel="external">(原文连接)</a>，理解起来就非常的简单明了。</p>
+<h1 id="How_to_use"><a href="#How_to_use" class="headerlink" title="How to use"></a>How to use</h1><h2 id="u5B9E_u73B0BlockCanaryContext_u4E0A_u4E0B_u6587"><a href="#u5B9E_u73B0BlockCanaryContext_u4E0A_u4E0B_u6587" class="headerlink" title="实现BlockCanaryContext上下文"></a>实现BlockCanaryContext上下文</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppBlockCanaryContext</span> <span class="keyword">extends</span> <span class="title">BlockCanaryContext</span> </span>&#123;</span><br><span class="line">    <span class="comment">// override to provide context like app qualifier, uid, network type, block threshold, log save path</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// this is default block threshold, you can set it by phone's performance</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getConfigBlockThreshold</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">500</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if set true, notification will be shown, else only write log file</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isNeedDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> BuildConfig.DEBUG;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// path to save log file</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLogPath</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"/blockcanary/performance"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>BlockCanaryContext中主要提供一个配置参数和客户端信息，提供给日志使用</p>
+<h2 id="u5728_u4E3B_u8FDB_u7A0B_u7684Application_u4E2D_u521D_u59CB_u5316_u5E76_u542F_u52A8"><a href="#u5728_u4E3B_u8FDB_u7A0B_u7684Application_u4E2D_u521D_u59CB_u5316_u5E76_u542F_u52A8" class="headerlink" title="在主进程的Application中初始化并启动"></a>在主进程的Application中初始化并启动</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do it on main process</span></span><br><span class="line">        BlockCanary.install(<span class="keyword">this</span>, <span class="keyword">new</span> AppBlockCanaryContext()).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你的应用是多进程的，一定要考虑好。比如，应用中将Service配置到单独的进程中，而这个Service是用来执行耗时操作的，那你一定要在Application中做初始化时考虑清楚，因为一般的Service的操作也是在主线程执行的，不应该算在UI界面的性能考虑范围内。</p>
+
+          
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2015/12/15/adb-commands/" itemprop="url">
                   Adb commands
                 </a>
@@ -308,124 +418,12 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/12/14/how-adb-works/" itemprop="url">
-                  How ADB works
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2015-12-14T16:19:00+08:00" content="2015-12-14">
-              2015-12-14
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
-<ul>
-<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
-<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
-<li>A daemon, which runs as a background process on each emulator or device instance.</li>
-</ul>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/12/14/how-adb-works/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -466,7 +464,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -480,7 +478,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">2</span>
               <span class="site-state-item-name">tags</span>
               </a>
           </div>

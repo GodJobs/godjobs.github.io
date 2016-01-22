@@ -1,0 +1,753 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Adb," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DragonBones" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adb client & server & adbd">
+<meta property="og:url" content="http://copyleft.me/2015/12/11/adb-client-server-adbd/index.html">
+<meta property="og:site_name" content="DragonBones">
+<meta property="og:description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+<meta property="og:image" content="http://7xonwp.com1.z0.glb.clouddn.com/blog_adb_adbd.jpg">
+<meta property="og:updated_time" content="2016-01-20T13:53:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adb client & server & adbd">
+<meta name="twitter:description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Adb client & server & adbd | DragonBones </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">DragonBones</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">From now on?!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Adb client & server & adbd
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-12-11T16:19:00+08:00" content="2015-12-11">
+              2015-12-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
+<ul>
+<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
+<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
+<li>A daemon, which runs as a background process on each emulator or device instance.</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<p><code>Adb</code>是<code>Android</code>开发者经常使用的一个命令行工具，经常用来连接<code>Android</code>设备，获取分析数据。</p>
+<p>今天在查看<code>adb</code>帮助文档时，对其中的几个没用过的参数很疑惑，非常非常常用的一个工具，但是我却对它的工作模式，没有一点点的了解。于是便引出了<code>adb</code>背后的故事。</p>
+<h2 id="u6982_u8FF0"><a href="#u6982_u8FF0" class="headerlink" title="概述"></a>概述</h2><p><code>Adb</code>是一个客户端-服务端模式的程序，包括三个部分：</p>
+<ul>
+<li>客户端，通常你在使用<code>adb</code>命令时，操作的就是客户端</li>
+<li>服务端，一个看不见的后台进程，一般运行在<code>PC</code>端的5037端口，你应该很熟悉这个端口号</li>
+<li>守护进程，一般来说一个<code>Android</code>设备对应一个守护进程，守护进程和服务器通信</li>
+</ul>
+<h2 id="u670D_u52A1_u7AEF"><a href="#u670D_u52A1_u7AEF" class="headerlink" title="服务端"></a>服务端</h2><p><code>Adb</code>中最重要的部分要数服务端了，它是连通客户端和守护进程的枢纽。一般运行在5037端口，著名的『adb server is out of date.  killing』就是因为服务端要使用5037端口已经被占用引起的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ adb start-server</span><br><span class="line">daemon not running. starting it now on port <span class="number">5037</span> *</span><br><span class="line">daemon started successfully *</span><br></pre></td></tr></table></figure>
+<p><code>adb start-server</code>启动服务端，就会告诉你服务进程成功在5037端口运行。</p>
+<p>我们使用命令看看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ lsof -Pn | grep <span class="number">5037</span></span><br><span class="line">adb <span class="number">6479</span> <span class="number">7</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (LISTEN)</span><br></pre></td></tr></table></figure>
+<p>这是没有连接任何<code>Android</code>设备的情况，下面我们启动一个<code>Android</code>模拟器。</p>
+<h2 id="u5B88_u62A4_u8FDB_u7A0B"><a href="#u5B88_u62A4_u8FDB_u7A0B" class="headerlink" title="守护进程"></a>守护进程</h2><p>上面说过，一个<code>Android</code>设备对应一个守护进程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ lsof -Pn | grep <span class="number">5037</span></span><br><span class="line">adb <span class="number">6479</span> <span class="number">7</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (LISTEN)</span><br><span class="line">adb <span class="number">6479</span> <span class="number">6</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span> (ESTABLISHED)</span><br><span class="line">emulator6 <span class="number">6616</span> <span class="number">5</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (ESTABLISHED)</span><br></pre></td></tr></table></figure>
+<p>在启动了一个模拟器之后，对应的启动了一个守护进程，和服务端保持通信。</p>
+<p>接下来我们再启动一个模拟器看看：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ lsof -Pn | grep <span class="number">5037</span></span><br><span class="line">adb <span class="number">6479</span> <span class="number">7</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (LISTEN)</span><br><span class="line">adb <span class="number">6479</span> <span class="number">6</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span> (ESTABLISHED)</span><br><span class="line">adb <span class="number">6479</span> <span class="number">13</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58452</span> (ESTABLISHED)</span><br><span class="line">emulator6 <span class="number">6616</span> <span class="number">5</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (ESTABLISHED)</span><br><span class="line">emulator6 <span class="number">6807</span> <span class="number">5</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58452</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (ESTABLISHED)</span><br></pre></td></tr></table></figure>
+<p>可以看到，再启动了一个模拟器之后，对应的也启动了一个守护进程。</p>
+<p>服务端和守护进程启动之后，我们就需要使用客户端进行与守护进程间的通信了。</p>
+<h2 id="u5BA2_u6237_u7AEF"><a href="#u5BA2_u6237_u7AEF" class="headerlink" title="客户端"></a>客户端</h2><p>要查看客户端，需要通过<code>adb shell</code>命令连接到模拟器，连接之后我们看看结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ lsof -Pn | grep <span class="number">5037</span></span><br><span class="line">adb <span class="number">6479</span> <span class="number">7</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (LISTEN)</span><br><span class="line">adb <span class="number">6479</span> <span class="number">6</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span> (ESTABLISHED)</span><br><span class="line">adb <span class="number">6479</span> <span class="number">17</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">59091</span> (ESTABLISHED)</span><br><span class="line">emulator6 <span class="number">6616</span> <span class="number">5</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">58069</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (ESTABLISHED)</span><br><span class="line">adb <span class="number">6873</span> <span class="number">3</span>u IPv4 <span class="number">0</span>t0 TCP <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">59091</span>-&gt;<span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">5037</span> (ESTABLISHED)</span><br></pre></td></tr></table></figure>
+<p>到这里，我们可以看出整个<code>PC</code>端的<code>adb</code>的运行模式：</p>
+<p><img src="http://7xonwp.com1.z0.glb.clouddn.com/blog_adb_adbd.jpg" alt="Adb运行模式"></p>
+<p>图片引用自<code>Android Adb Analyse</code>。</p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p>通过以上的简单分析，我们已经清晰的看出<code>PC</code>上<code>adb</code>的运行模式。并不像我之前简单认为的是从<code>PC</code>直接连接到<code>Android</code>设备的。一定要理解清楚客户端，服务端和<code>ADBD</code>之间的关系。后面有时间的话，希望能对<code>ADBD</code>进行深入的了解。</p>
+<h2 id="u53C2_u8003_u94FE_u63A5"><a href="#u53C2_u8003_u94FE_u63A5" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="http://blog.csdn.net/stpeace/article/details/24933813" target="_blank" rel="external">Adb 原理浅析</a></li>
+<li><a href="http://blog.csdn.net/liranke/article/details/4999210" target="_blank" rel="external">Android Adb Analyse</a></li>
+</ul>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Adb/" rel="tag">#Adb</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/11/25/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/14/how-adb-works/" rel="prev" title="How ADB works">
+                How ADB works <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/3899178?v=3&s=460"
+               alt="Liz" />
+          <p class="site-author-name" itemprop="name">Liz</p>
+          <p class="site-description motion-element" itemprop="description">路漫漫其修远兮，吾将上下而求索</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="motion-element">
+          <div class="copyright">
+            
+            &copy;  2015 - 
+            <span itemprop="copyrightYear">2016</span>
+            <span class="with-love">
+              <i class="icon-next-heart fa fa-heart"></i>
+            </span>
+            <span class="author" itemprop="copyrightHolder">Liz</span>
+          </div>
+
+          <div class="powered-by">
+            Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+          </div>
+
+          <div class="theme-info">
+            Theme -
+            <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+              NexT.Muse
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u6982_u8FF0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u670D_u52A1_u7AEF"><span class="nav-number">2.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5B88_u62A4_u8FDB_u7A0B"><span class="nav-number">3.</span> <span class="nav-text">守护进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5BA2_u6237_u7AEF"><span class="nav-number">4.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003_u94FE_u63A5"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liz</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/font.js?v=0.5.0"></script>
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

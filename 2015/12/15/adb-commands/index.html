@@ -1,0 +1,825 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Adb," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DragonBones" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Android Debug Bridge version 1.0.31">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Adb commands">
+<meta property="og:url" content="http://copyleft.me/2015/12/15/adb-commands/index.html">
+<meta property="og:site_name" content="DragonBones">
+<meta property="og:description" content="Android Debug Bridge version 1.0.31">
+<meta property="og:updated_time" content="2016-01-20T13:53:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Adb commands">
+<meta name="twitter:description" content="Android Debug Bridge version 1.0.31">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Adb commands | DragonBones </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">DragonBones</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">From now on?!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Adb commands
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-12-15T10:57:00+08:00" content="2015-12-15">
+              2015-12-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android Debug Bridge version 1.0.31</p>
+<a id="more"></a>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"> <span class="operator">-a</span>                            - directs adb to listen on all interfaces <span class="keyword">for</span> a connection</span><br><span class="line"> <span class="operator">-d</span>                            - directs <span class="built_in">command</span> to the only connected USB device</span><br><span class="line">                                 returns an error <span class="keyword">if</span> more than one USB device is present.</span><br><span class="line"> <span class="operator">-e</span>                            - directs <span class="built_in">command</span> to the only running emulator.</span><br><span class="line">                                 returns an error <span class="keyword">if</span> more than one emulator is running.</span><br><span class="line"> <span class="operator">-s</span> &lt;specific device&gt;          - directs <span class="built_in">command</span> to the device or emulator with the given</span><br><span class="line">                                 serial number or qualifier. Overrides ANDROID_SERIAL</span><br><span class="line">                                 environment variable.</span><br><span class="line"> -p &lt;product name or path&gt;     - simple product name like <span class="string">'sooner'</span>, or</span><br><span class="line">                                 a relative/absolute path to a product</span><br><span class="line">                                 out directory like <span class="string">'out/target/product/sooner'</span>.</span><br><span class="line">                                 If -p is not specified, the ANDROID_PRODUCT_OUT</span><br><span class="line">                                 environment variable is used, <span class="built_in">which</span> must</span><br><span class="line">                                 be an absolute path.</span><br><span class="line"> -H                            - Name of adb server host (default: localhost)</span><br><span class="line"> -P                            - Port of adb server (default: <span class="number">5037</span>)</span><br><span class="line"> devices [<span class="operator">-l</span>]                  - list all connected devices</span><br><span class="line">                                 (<span class="string">'-l'</span> will also list device qualifiers)</span><br><span class="line"> connect &lt;host&gt;[:&lt;port&gt;]       - connect to a device via TCP/IP</span><br><span class="line">                                 Port <span class="number">5555</span> is used by default <span class="keyword">if</span> no port number is specified.</span><br><span class="line"> disconnect [&lt;host&gt;[:&lt;port&gt;]]  - disconnect from a TCP/IP device.</span><br><span class="line">                                 Port <span class="number">5555</span> is used by default <span class="keyword">if</span> no port number is specified.</span><br><span class="line">                                 Using this <span class="built_in">command</span> with no additional arguments</span><br><span class="line">                                 will disconnect from all connected TCP/IP devices.</span><br><span class="line"></span><br><span class="line">device commands:</span><br><span class="line">  adb push &lt;<span class="built_in">local</span>&gt; &lt;remote&gt;    - copy file/dir to device</span><br><span class="line">  adb pull &lt;remote&gt; [&lt;<span class="built_in">local</span>&gt;]  - copy file/dir from device</span><br><span class="line">  adb sync [ &lt;directory&gt; ]     - copy host-&gt;device only <span class="keyword">if</span> changed</span><br><span class="line">                                 (<span class="operator">-l</span> means list but don<span class="string">'t copy)</span><br><span class="line">                                 (see '</span>adb <span class="built_in">help</span> all<span class="string">')</span><br><span class="line">  adb shell                    - run remote shell interactively</span><br><span class="line">  adb shell &lt;command&gt;          - run remote shell command</span><br><span class="line">  adb emu &lt;command&gt;            - run emulator console command</span><br><span class="line">  adb logcat [ &lt;filter-spec&gt; ] - View device log</span><br><span class="line">  adb forward --list           - list all forward socket connections.</span><br><span class="line">                                 the format is a list of lines with the following format:</span><br><span class="line">                                    &lt;serial&gt; " " &lt;local&gt; " " &lt;remote&gt; "\n"</span><br><span class="line">  adb forward &lt;local&gt; &lt;remote&gt; - forward socket connections</span><br><span class="line">                                 forward specs are one of: </span><br><span class="line">                                   tcp:&lt;port&gt;</span><br><span class="line">                                   localabstract:&lt;unix domain socket name&gt;</span><br><span class="line">                                   localreserved:&lt;unix domain socket name&gt;</span><br><span class="line">                                   localfilesystem:&lt;unix domain socket name&gt;</span><br><span class="line">                                   dev:&lt;character device name&gt;</span><br><span class="line">                                   jdwp:&lt;process pid&gt; (remote only)</span><br><span class="line">  adb forward --no-rebind &lt;local&gt; &lt;remote&gt;</span><br><span class="line">                               - same as '</span>adb forward &lt;<span class="built_in">local</span>&gt; &lt;remote&gt;<span class="string">' but fails</span><br><span class="line">                                 if &lt;local&gt; is already forwarded</span><br><span class="line">  adb forward --remove &lt;local&gt; - remove a specific forward socket connection</span><br><span class="line">  adb forward --remove-all     - remove all forward socket connections</span><br><span class="line">  adb jdwp                     - list PIDs of processes hosting a JDWP transport</span><br><span class="line">  adb install [-l] [-r] [-s] [--algo &lt;algorithm name&gt; --key &lt;hex-encoded key&gt; --iv &lt;hex-encoded iv&gt;] &lt;file&gt;</span><br><span class="line">                               - push this package file to the device and install it</span><br><span class="line">                                 ('</span><span class="operator">-l</span><span class="string">' means forward-lock the app)</span><br><span class="line">                                 ('</span>-r<span class="string">' means reinstall the app, keeping its data)</span><br><span class="line">                                 ('</span><span class="operator">-s</span><span class="string">' means install on SD card instead of internal storage)</span><br><span class="line">                                 ('</span>--algo<span class="string">', '</span>--key<span class="string">', and '</span>--iv<span class="string">' mean the file is encrypted already)</span><br><span class="line">  adb uninstall [-k] &lt;package&gt; - remove this app package from the device</span><br><span class="line">                                 ('</span>-k<span class="string">' means keep the data and cache directories)</span><br><span class="line">  adb bugreport                - return all information from the device</span><br><span class="line">                                 that should be included in a bug report.</span><br><span class="line"></span><br><span class="line">  adb backup [-f &lt;file&gt;] [-apk|-noapk] [-shared|-noshared] [-all] [-system|-nosystem] [&lt;packages...&gt;]</span><br><span class="line">                               - write an archive of the device'</span>s data to &lt;file&gt;.</span><br><span class="line">                                 If no <span class="operator">-f</span> option is supplied <span class="keyword">then</span> the data is written</span><br><span class="line">                                 to <span class="string">"backup.ab"</span> <span class="keyword">in</span> the current directory.</span><br><span class="line">                                 (-apk|-noapk <span class="built_in">enable</span>/<span class="built_in">disable</span> backup of the .apks themselves</span><br><span class="line">                                    <span class="keyword">in</span> the archive; the default is noapk.)</span><br><span class="line">                                 (-shared|-noshared <span class="built_in">enable</span>/<span class="built_in">disable</span> backup of the device<span class="string">'s</span><br><span class="line">                                    shared storage / SD card contents; the default is noshared.)</span><br><span class="line">                                 (-all means to back up all installed applications)</span><br><span class="line">                                 (-system|-nosystem toggles whether -all automatically includes</span><br><span class="line">                                    system applications; the default is to include system apps)</span><br><span class="line">                                 (&lt;packages...&gt; is the list of applications to be backed up.  If</span><br><span class="line">                                    the -all or -shared flags are passed, then the package</span><br><span class="line">                                    list is optional.  Applications explicitly given on the</span><br><span class="line">                                    command line will be included even if -nosystem would</span><br><span class="line">                                    ordinarily cause them to be omitted.)</span><br><span class="line"></span><br><span class="line">  adb restore &lt;file&gt;           - restore device contents from the &lt;file&gt; backup archive</span><br><span class="line"></span><br><span class="line">  adb help                     - show this help message</span><br><span class="line">  adb version                  - show version num</span><br><span class="line"></span><br><span class="line">scripting:</span><br><span class="line">  adb wait-for-device          - block until device is online</span><br><span class="line">  adb start-server             - ensure that there is a server running</span><br><span class="line">  adb kill-server              - kill the server if it is running</span><br><span class="line">  adb get-state                - prints: offline | bootloader | device</span><br><span class="line">  adb get-serialno             - prints: &lt;serial-number&gt;</span><br><span class="line">  adb get-devpath              - prints: &lt;device-path&gt;</span><br><span class="line">  adb status-window            - continuously print device status for a specified device</span><br><span class="line">  adb remount                  - remounts the /system partition on the device read-write</span><br><span class="line">  adb reboot [bootloader|recovery] - reboots the device, optionally into the bootloader or recovery program</span><br><span class="line">  adb reboot-bootloader        - reboots the device into the bootloader</span><br><span class="line">  adb root                     - restarts the adbd daemon with root permissions</span><br><span class="line">  adb usb                      - restarts the adbd daemon listening on USB</span><br><span class="line">  adb tcpip &lt;port&gt;             - restarts the adbd daemon listening on TCP on the specified port</span><br><span class="line">networking:</span><br><span class="line">  adb ppp &lt;tty&gt; [parameters]   - Run PPP over USB.</span><br><span class="line"> Note: you should not automatically start a PPP connection.</span><br><span class="line"> &lt;tty&gt; refers to the tty for PPP stream. Eg. dev:/dev/omap_csmi_tty1</span><br><span class="line"> [parameters] - Eg. defaultroute debug dump local notty usepeerdns</span><br><span class="line"></span><br><span class="line">adb sync notes: adb sync [ &lt;directory&gt; ]</span><br><span class="line">  &lt;localdir&gt; can be interpreted in several ways:</span><br><span class="line"></span><br><span class="line">  - If &lt;directory&gt; is not specified, both /system and /data partitions will be updated.</span><br><span class="line"></span><br><span class="line">  - If it is "system" or "data", only the corresponding partition</span><br><span class="line">    is updated.</span><br><span class="line"></span><br><span class="line">environmental variables:</span><br><span class="line">  ADB_TRACE                    - Print debug information. A comma separated list of the following values</span><br><span class="line">                                 1 or all, adb, sockets, packets, rwx, usb, sync, sysdeps, transport, jdwp</span><br><span class="line">  ANDROID_SERIAL               - The serial number to connect to. -s takes priority over this if given.</span><br><span class="line">  ANDROID_LOG_TAGS             - When used with the logcat option, only these debug tags are printed.</span></span><br></pre></td></tr></table></figure>
+<h2 id="u5E38_u7528_u547D_u4EE4"><a href="#u5E38_u7528_u547D_u4EE4" class="headerlink" title="常用命令"></a>常用命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb devices [<span class="operator">-l</span>]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>列出当前已经连接的所有<code>Android</code>设备</li>
+<li><p>使用过程中发现，<code>-l</code>选项使用还是不使用效果类似</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adb devices</span><br><span class="line">List of devices attached</span><br><span class="line">emulator-<span class="number">5554</span>          device</span><br><span class="line"><span class="number">09</span>f0ce98               device</span><br><span class="line"><span class="number">192.168</span>.<span class="number">1.11</span>:<span class="number">31015</span>     device</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>-l</code>选项后，如果设备包含更丰富的信息，也会同时展示出来</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adb devices <span class="operator">-l</span></span><br><span class="line">List of devices attached</span><br><span class="line">emulator-<span class="number">5554</span>          device</span><br><span class="line"><span class="number">09</span>f0ce98               device usb:<span class="number">3</span>-<span class="number">1</span> product:razor model:Nexus_7 device:flo</span><br><span class="line"><span class="number">192.168</span>.<span class="number">1.11</span>:<span class="number">31015</span>     device</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb connect &lt;host&gt;[:&lt;port&gt;]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>一般，如果使用模拟器或者USB连接的<code>Android</code>设备，模拟器或者<code>Android</code>设备会自动连接到<code>ADB</code>，可以直接通过<code>devices</code>命令查看</li>
+<li>通过<code>TCP/IP</code>方式连接时，指定需要连接的设备的<code>host</code>（一般就是<code>ip</code>地址），和可选端口号<code>port</code>（不指定时默认为<code>5555</code>），就可以连接到指定的<code>Android</code>设备</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb disconnect [&lt;host&gt;[:&lt;port&gt;]]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>断开与指定<code>Android</code>设备的连接</li>
+<li>如果不指定<code>port</code>，默认为<code>5555</code></li>
+<li>如果不指定任何参数，将会断开所有已经连接的<code>Android</code>设备（以<code>TCP/IP</code>方式连接的所有设备 ）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb push &lt;<span class="built_in">local</span>&gt; &lt;remote&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将本地<code>local</code>的文件或者文件夹拷贝到远程<code>remote</code></li>
+<li>在<code>Windows</code>下和非<code>Windows</code>下拷贝文件夹到远程设备<code>remote</code>是有区别的。在<code>Windows</code>下拷贝文件夹时，一定不要在文件夹名称后面添加斜杠<code>\</code>或者反斜杠<code>/</code>，比如<code>adb push dir /data/data</code>，否则会提示没有<code>dir</code>这个文件或者文件夹。在非<code>Windows</code>操作系统中可以添加反斜杠<code>/</code>也可以不添加，效果都一样</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb pull &lt;remote&gt; [&lt;<span class="built_in">local</span>&gt;]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从远程设备<code>remote</code>拷贝文件或者文件夹到本地目录</li>
+<li>不指定本地目录<code>local</code>，默认拷贝到命令执行的路径</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb shell [&lt;<span class="built_in">command</span>&gt;]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行指定设备的<code>SHELL</code></li>
+<li>如果不指定命令，则会进入交互模式</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb emu &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>运行模拟器控制台命令</li>
+<li>现在很少使用模拟器（另外一个原因就是不太了解模拟器控制台命令），使用过的命令也只有一个<code>adb -s emulator-5554 emu kill</code>，停止模拟器</li>
+<li>需要多了解一点的可以参考<a href="https://devmaze.wordpress.com/2011/12/12/starting-and-stopping-android-emulators/" target="_blank" rel="external">Starting and stopping android emulators</a></li>
+<li>需要了解更多的模拟器控制台命令，可以参考<a href="http://www.linuxtopia.org/online_books/android/devguide/guide/developing/tools/android_emulator_console.html" target="_blank" rel="external">Using the Emulator Console</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb logcat [ &lt;filter-spec&gt; ]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>logcat</code>命令抓取日志信息</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install [<span class="operator">-l</span>] [-r] [<span class="operator">-s</span>] [--algo &lt;algorithm name&gt; --key &lt;hex-encoded key&gt; --iv &lt;hex-encoded iv&gt;] &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>安装<code>APK</code>文件到指定的设备中</li>
+<li><code>--algo --key --iv</code>三个参数用于安装加密<code>APK</code>文件，是在<code>Android4.1</code>之后加入的，详细信息可以参考<a href="https://books.google.com.hk/books?id=y11NBQAAQBAJ&amp;pg=PA77&amp;lpg=PA77&amp;dq=android+adb+install+encode+apk&amp;source=bl&amp;ots=nUXvzUuR3B&amp;sig=OjwcwaR0tHzNgdwK7r60rr_4GRo&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwihn_retd3JAhUDVI4KHT2pAxsQ6AEIITAB#v=onepage&amp;q=android%20adb%20install%20encode%20apk&amp;f=false" target="_blank" rel="external">Android Security Internals</a>（需自备梯子）</li>
+<li><code>-l</code>选项一般用于付费应用，是在<code>Android2.2</code>之后加入的拷贝保护机制，<code>Android4.1</code>中进行了重新设计，具体可以参见上面的链接</li>
+<li><code>-r</code>选项用于重新安装，重新安装时会保留应用的数据</li>
+<li><code>-s</code>选项指定安装位置为<code>SDCARD</code></li>
+<li>如果仅仅指定了需要安装的<code>APK</code>文件路径，那么将会执行升级安装，并且安装到设备的内部存储中</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb uninstall [-k] &lt;package&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通过应用的包名卸载应用</li>
+<li><code>-k</code>选项表示保留应用的数据</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb bugreport</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>ADB</code>生成<code>BUG</code>报告，包含的信息非常的多，包括整个设备的很多状态信息，一般很少会用到</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb backup [<span class="operator">-f</span> &lt;file&gt;] [-apk|-noapk] [-shared|-noshared] [-all] [-system|-nosystem] [&lt;packages...&gt;]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>备份应用数据，备份所有应用数据，或者指定的应用数据（具体内容参见命令描述）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb restore &lt;file&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>从备份文件中恢复数据</li>
+</ul>
+<h2 id="u4E0D_u5E38_u7528_u7684_u547D_u4EE4"><a href="#u4E0D_u5E38_u7528_u7684_u547D_u4EE4" class="headerlink" title="不常用的命令"></a>不常用的命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">adb forward --list</span><br><span class="line">adb forward &lt;<span class="built_in">local</span>&gt; &lt;remote&gt;</span><br><span class="line">adb forward --no-rebind &lt;<span class="built_in">local</span>&gt; &lt;remote&gt;</span><br><span class="line">adb forward --remove &lt;<span class="built_in">local</span>&gt;</span><br><span class="line">adb forward --remove-all</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>adb</code>端口转发命令，一般的应用开发很少用到，可以看看<a href="http://blog.chinaunix.net/uid-20564848-id-73687.html" target="_blank" rel="external">Adb端口转发</a></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb jdwp</span><br></pre></td></tr></table></figure>
+<ul>
+<li>列出所有支持<code>ADWP</code>协议调试的进程号，一般会结合端口转发使用，参见<a href="http://mybrainoncode.com/blog/2013/11/03/debugging-android-with-jdb/" target="_blank" rel="external">Debugging Android with jdb</a></li>
+<li>现在的开发工具<code>Android Studio</code>已经集成了调试工具，开发者一般不会使用命令行进行调试</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb tcpip &lt;port&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>重启设备的<code>ADBD</code>，一般从<code>USB</code>模式切换到<code>WIFI</code>模式时使用</li>
+<li>使用<code>USB</code>连接设备，执行<code>adb tcpip 5555</code>，断开<code>USB</code>，执行<code>adb connect ip</code>就可以了</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb ppp &lt;tty&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在<code>Linux PC</code>和<code>Android</code>设备之间建立<code>PPP</code>链接，可以实现设备通过电脑连接到网络</li>
+<li>参考<a href="http://www.cnblogs.com/hoji-real/articles/2362619.html" target="_blank" rel="external">How to set up Android ppp over usb with adb</a></li>
+<li>没有使用过这个命令，因为手头没有可用的设备，所以也没办法测试</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb sync [ &lt;directory&gt; ]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将<code>Host</code>目录中的文件，同步到<code>Android</code>设备的<code>system</code>或者<code>data</code>分区</li>
+<li>使用<code>-p</code>或者在环境变量中定义<code>ANDROID_PRODUCT_OUT</code>指定<code>Host</code>目录</li>
+<li><code>adb -p dir sync</code>会将<code>dir</code>目录下的<code>system</code>和<code>data</code>目录中的文件同步到设备中，<code>dir</code>要提供绝对路径，而且只会同步<code>dir</code>目录下的<code>system</code>和<code>data</code>目录，如果没有这两个目录，则不会同步任何文件</li>
+<li>如果只需要同步<code>system</code>目录中的文件，可以执行<code>adb -p dir sync system</code>命令</li>
+<li>如果只需要同步<code>data</code>目录中的文件，可以执行<code>adb -p dir sync data</code>命令</li>
+</ul>
+<h2 id="Support_adb_client_connect_to_remote_server"><a href="#Support_adb_client_connect_to_remote_server" class="headerlink" title="Support adb client connect to remote server"></a>Support adb client connect to remote server</h2><ul>
+<li>一般很少会碰到这种应用场景，<code>ADB</code>的<code>changelog</code>中有说明，具体参见最后的参考部分</li>
+<li>假设一种情况，有一个设备通过<code>USB</code>连接到了一个远程电脑上，需要连接到远程电脑上的<code>ADB server</code>，你就可以使用下面的方式实现（测试中发现<code>Windows</code>中是不行的，<code>Windows</code>中的<code>ADB</code>就没有<code>-P</code>选项）</li>
+<li>在远程电脑上执行<code>adb -a -P 5037 fork-server server &amp;</code>，这种方式启动<code>ADB server</code>可以通过远程连接</li>
+<li>执行<code>adb -H ip shell</code>连接到远程<code>ADB server</code></li>
+<li>执行完以上步骤之后，你就可以像使用本地<code>ADB server</code>一样使用<code>ADB</code>命令了</li>
+</ul>
+<p>其他命令比较简单，就不做介绍了，<code>ADB</code>的命令还是有很多实用价值的，值得好好学习。</p>
+<h2 id="u53C2_u8003"><a href="#u53C2_u8003" class="headerlink" title="参考"></a>参考</h2><p><a href="https://gitlab.com/pbeeler/system_core/commit/d7b33085117ccbb908a883f624cb1fe5495ee92a" target="_blank" rel="external">ADB Changelog</a><br><a href="http://stackoverflow.com/questions/13278429/how-to-set-up-adb-for-remote-machine-development-and-local-device-deployment#18551325" target="_blank" rel="external">Remote ADB</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Adb/" rel="tag">#Adb</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/14/how-adb-works/" rel="next" title="How ADB works">
+                <i class="fa fa-chevron-left"></i> How ADB works
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/01/21/talk-about-blockcanary/" rel="prev" title="Talk about BlockCanary">
+                Talk about BlockCanary <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/3899178?v=3&s=460"
+               alt="Liz" />
+          <p class="site-author-name" itemprop="name">Liz</p>
+          <p class="site-description motion-element" itemprop="description">路漫漫其修远兮，吾将上下而求索</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="motion-element">
+          <div class="copyright">
+            
+            &copy;  2015 - 
+            <span itemprop="copyrightYear">2016</span>
+            <span class="with-love">
+              <i class="icon-next-heart fa fa-heart"></i>
+            </span>
+            <span class="author" itemprop="copyrightHolder">Liz</span>
+          </div>
+
+          <div class="powered-by">
+            Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+          </div>
+
+          <div class="theme-info">
+            Theme -
+            <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+              NexT.Muse
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#u5E38_u7528_u547D_u4EE4"><span class="nav-number">1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4E0D_u5E38_u7528_u7684_u547D_u4EE4"><span class="nav-number">2.</span> <span class="nav-text">不常用的命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Support_adb_client_connect_to_remote_server"><span class="nav-number">3.</span> <span class="nav-text">Support adb client connect to remote server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u53C2_u8003"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liz</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/font.js?v=0.5.0"></script>
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

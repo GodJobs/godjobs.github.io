@@ -1,0 +1,782 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Adb," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DragonBones" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How ADB works">
+<meta property="og:url" content="http://copyleft.me/2015/12/14/how-adb-works/index.html">
+<meta property="og:site_name" content="DragonBones">
+<meta property="og:description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+<meta property="og:image" content="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_how_to_connect.png">
+<meta property="og:image" content="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_overview.png">
+<meta property="og:image" content="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_seq_chart.png">
+<meta property="og:updated_time" content="2016-01-20T13:53:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How ADB works">
+<meta name="twitter:description" content="Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three c">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> How ADB works | DragonBones </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">DragonBones</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">From now on?!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                How ADB works
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2015-12-14T16:19:00+08:00" content="2015-12-14">
+              2015-12-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>Android Debug Bridge (adb) is a versatile command line tool that lets you communicate with an emulator instance or connected Android-powered device. It is a client-server program that includes three components:</p>
+<ul>
+<li>A client, which runs on your development machine. You can invoke a client from a shell by issuing an adb command. Other Android tools such as the ADT plugin and DDMS also create adb clients.</li>
+<li>A server, which runs as a background process on your development machine. The server manages communication between the client and the adb daemon running on an emulator or device.</li>
+<li>A daemon, which runs as a background process on each emulator or device instance.</li>
+</ul>
+</blockquote>
+<a id="more"></a>
+<h2 id="What_is_ADB"><a href="#What_is_ADB" class="headerlink" title="What is ADB"></a>What is ADB</h2><ul>
+<li>如果你是一个<code>Android</code>开发者，你应该使用过<code>adb logcat</code>，<code>adb shell</code>等命令</li>
+<li>甚至你仅仅使用过<code>Android Studio</code>或者<code>Eclipse</code>中的<code>DDMS</code>，内部也是使用<code>ADB</code>实现的</li>
+<li>使用<code>ADB</code>你可以连接模拟器或者真实的<code>Android</code>设备</li>
+</ul>
+<h2 id="How_to_connect"><a href="#How_to_connect" class="headerlink" title="How to connect"></a>How to connect</h2><p><img src="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_how_to_connect.png" alt="How to connect"></p>
+<h2 id="ADB_overview"><a href="#ADB_overview" class="headerlink" title="ADB overview"></a>ADB overview</h2><p><img src="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_overview.png" alt="Overview"></p>
+<p><code>ADB</code>是一个和<code>Aandroid</code>模拟器或者<code>Android</code>设备通信的通用工具，一般开发者会使用<code>adb logcat</code>等命令，从<code>Android</code>设备中获取分析数据。</p>
+<p><code>ADB</code>是一个客户端-服务端模式的程序，包括三个部分：</p>
+<ul>
+<li>客户端，运行在<code>Host</code>上。当使用<code>shell</code>发送<code>ADB</code>命令时就会调起一个客户端。<code>ADT</code>插件或者<code>DDMS</code>也会创建<code>ADB</code>客户端</li>
+<li>服务端，运行在<code>Host</code>的后台程序，负责管理客户端和模拟器或者<code>Android</code>设备上守护程序的通信，一般使用<code>Host</code>的<code>5037</code>端口</li>
+<li>守护程序（ADBD），运行在模拟器或者<code>Android</code>设备上的后台守护程序</li>
+</ul>
+<p>客户端+服务端运行在<code>Host</code>上，这两部构成了<code>ADB</code>的客户端，守护程序（ADBD）运行在模拟器或者<code>Android</code>设备上这才是<code>ADB</code>的服务端。总的来说就是，<code>ADBD</code>向<code>Host</code>上的客户端+服务端提供服务，服务端扮演一个代理的角色。</p>
+<p><img src="http://7xonwp.com1.z0.glb.clouddn.com/blogadb_seq_chart.png" alt="Seq Chart"></p>
+<h2 id="2_roles_of_ADB"><a href="#2_roles_of_ADB" class="headerlink" title="2 roles of ADB"></a>2 roles of ADB</h2><ul>
+<li>提供通信功能<ul>
+<li>为<code>Host</code>和目标设备提供通信途径</li>
+<li>使用<code>USB</code>或者<code>TCP</code>通信，但是客户端不用关心</li>
+</ul>
+</li>
+<li>提供服务功能<ul>
+<li>通过通信功能在目标设备上执行一些操作<ul>
+<li>使用<code>adb shell</code>执行命令</li>
+<li>使用<code>adb pull/push</code>进行文件传输</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="When_does_ADB_server_start"><a href="#When_does_ADB_server_start" class="headerlink" title="When does ADB server start"></a>When does ADB server start</h2><ul>
+<li>明确地调用<code>adb start-server</code><ul>
+<li>这条命令会以后台进程的方式启动<code>ADB server</code></li>
+</ul>
+</li>
+<li>通常不需要调用<code>adb start-server</code>，<code>ADB server</code>会在需要的时候自动启动</li>
+<li>需要重启<code>ADB server</code>时，执行<code>adb kill-server</code></li>
+<li>事实上，<code>ADB client</code>和<code>ADB server</code>共享同一个可执行程序<ul>
+<li><code>adb start-server</code>等效于<code>adb fork-server server &amp;</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="Secure_mode"><a href="#Secure_mode" class="headerlink" title="Secure mode"></a>Secure mode</h2><ul>
+<li><code>Android</code>设备都有<code>ADBD</code>，一般都运行在安全模式下(<code>ro.secure</code> = 1)。</li>
+<li>如果<code>ro.secure</code> = 1，<code>ADBD</code>将会以<code>SHELL</code>用户身份运行（<code>SHELL</code>用户并没有特权），否则<code>ADBD</code>则会以<code>root</code>用户身份运行</li>
+<li>在安全模式下，<code>ADBD</code>是以<code>SHELL</code>用户身份调用所有服务的，一些服务将会因为权限不足而调用失败</li>
+</ul>
+<h2 id="How_secure_mode_decided"><a href="#How_secure_mode_decided" class="headerlink" title="How secure mode decided"></a>How secure mode decided</h2><ul>
+<li>模拟器上<code>secure</code> = 0（非安全模式）</li>
+<li>系统属性中<code>ro.secure</code> == 1 → <code>secure</code> = 1（安全模式）<ul>
+<li>如果<code>ro.debuggable</code> == 1（可以调试）, 可以通过<code>adb root</code>启动非安全模式的<code>adb</code></li>
+</ul>
+</li>
+<li>基本上所有的<code>Android</code>出货设备默认都是<code>ro.secure</code> = 1（安全模式）, <code>ro.debuggable</code> = 0（不可调试）</li>
+</ul>
+<hr>
+<p><a href="https://events.linuxfoundation.org/images/stories/pdf/lf_abs12_kobayashi.pdf" target="_blank" rel="external">原文链接</a> （以上图片均来自原文）</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Adb/" rel="tag">#Adb</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/11/adb-client-server-adbd/" rel="next" title="Adb client & server & adbd">
+                <i class="fa fa-chevron-left"></i> Adb client & server & adbd
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/12/15/adb-commands/" rel="prev" title="Adb commands">
+                Adb commands <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/3899178?v=3&s=460"
+               alt="Liz" />
+          <p class="site-author-name" itemprop="name">Liz</p>
+          <p class="site-description motion-element" itemprop="description">路漫漫其修远兮，吾将上下而求索</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="motion-element">
+          <div class="copyright">
+            
+            &copy;  2015 - 
+            <span itemprop="copyrightYear">2016</span>
+            <span class="with-love">
+              <i class="icon-next-heart fa fa-heart"></i>
+            </span>
+            <span class="author" itemprop="copyrightHolder">Liz</span>
+          </div>
+
+          <div class="powered-by">
+            Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+          </div>
+
+          <div class="theme-info">
+            Theme -
+            <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+              NexT.Muse
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What_is_ADB"><span class="nav-number">1.</span> <span class="nav-text">What is ADB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How_to_connect"><span class="nav-number">2.</span> <span class="nav-text">How to connect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ADB_overview"><span class="nav-number">3.</span> <span class="nav-text">ADB overview</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2_roles_of_ADB"><span class="nav-number">4.</span> <span class="nav-text">2 roles of ADB</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#When_does_ADB_server_start"><span class="nav-number">5.</span> <span class="nav-text">When does ADB server start</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Secure_mode"><span class="nav-number">6.</span> <span class="nav-text">Secure mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#How_secure_mode_decided"><span class="nav-number">7.</span> <span class="nav-text">How secure mode decided</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liz</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/font.js?v=0.5.0"></script>
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

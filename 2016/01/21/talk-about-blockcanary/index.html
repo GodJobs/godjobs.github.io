@@ -1,0 +1,729 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.googleapis.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Opensource," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="DragonBones" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.png?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="前一段时间在微博上有人分享了一个透明检测应用卡顿方法的文章（原文连接）。我并没有急着去看文章的内容，而是先自己想一想，能否很快的在头脑中给出一个类似的解决方案。当然结果是并没有，哈哈，不过昨天文章的作者开源了相应的代码实现（源代码），今天就来好好分析学习一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Talk about BlockCanary">
+<meta property="og:url" content="http://copyleft.me/2016/01/21/talk-about-blockcanary/index.html">
+<meta property="og:site_name" content="DragonBones">
+<meta property="og:description" content="前一段时间在微博上有人分享了一个透明检测应用卡顿方法的文章（原文连接）。我并没有急着去看文章的内容，而是先自己想一想，能否很快的在头脑中给出一个类似的解决方案。当然结果是并没有，哈哈，不过昨天文章的作者开源了相应的代码实现（源代码），今天就来好好分析学习一下。">
+<meta property="og:updated_time" content="2016-01-22T15:48:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Talk about BlockCanary">
+<meta name="twitter:description" content="前一段时间在微博上有人分享了一个透明检测应用卡顿方法的文章（原文连接）。我并没有急着去看文章的内容，而是先自己想一想，能否很快的在头脑中给出一个类似的解决方案。当然结果是并没有，哈哈，不过昨天文章的作者开源了相应的代码实现（源代码），今天就来好好分析学习一下。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Talk about BlockCanary | DragonBones </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">DragonBones</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">From now on?!</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Talk about BlockCanary
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-01-21T23:00:00+08:00" content="2016-01-21">
+              2016-01-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前一段时间在微博上有人分享了一个透明检测应用卡顿方法的文章<a href="http://blog.zhaiyifan.cn/2016/01/16/BlockCanaryTransparentPerformanceMonitor/" target="_blank" rel="external">（原文连接）</a>。我并没有急着去看文章的内容，而是先自己想一想，能否很快的在头脑中给出一个类似的解决方案。当然结果是并没有，哈哈，不过昨天文章的作者开源了相应的代码实现<a href="https://github.com/moduth/blockcanary" target="_blank" rel="external">（源代码）</a>，今天就来好好分析学习一下。</p>
+<a id="more"></a>
+<h1 id="u4EE3_u7801_u7ED3_u6784"><a href="#u4EE3_u7801_u7ED3_u6784" class="headerlink" title="代码结构"></a>代码结构</h1><p>首先给出代码结构，不包含其中的资源部分。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">└── com</span><br><span class="line">    └── github</span><br><span class="line">        └── moduth</span><br><span class="line">            └── blockcanary</span><br><span class="line">                ├── BlockCanary<span class="class">.java</span></span><br><span class="line">                ├── BlockCanaryContext<span class="class">.java</span></span><br><span class="line">                ├── BlockListener<span class="class">.java</span></span><br><span class="line">                ├── LooperPrinter<span class="class">.java</span></span><br><span class="line">                ├── info</span><br><span class="line">                │   ├── CpuSampler<span class="class">.java</span></span><br><span class="line">                │   └── ThreadStackSampler<span class="class">.java</span></span><br><span class="line">                ├── log</span><br><span class="line">                │   ├── Block<span class="class">.java</span></span><br><span class="line">                │   ├── BlockCanaryInternals<span class="class">.java</span></span><br><span class="line">                │   ├── LogWriter<span class="class">.java</span></span><br><span class="line">                │   ├── PerformanceUtils<span class="class">.java</span></span><br><span class="line">                │   ├── ProcessUtils<span class="class">.java</span></span><br><span class="line">                │   └── UploadMonitorLog<span class="class">.java</span></span><br><span class="line">                └── ui</span><br><span class="line">                    ├── BlockDetailAdapter<span class="class">.java</span></span><br><span class="line">                    ├── DisplayBlockActivity<span class="class">.java</span></span><br><span class="line">                    ├── DisplayLeakConnectorView<span class="class">.java</span></span><br><span class="line">                    ├── LeakCanaryUi<span class="class">.java</span></span><br><span class="line">                    └── MoreDetailsView.java</span><br></pre></td></tr></table></figure>
+<p>层次结构很清晰，只要明白了实现原理之后，理解起来就简单明了了。</p>
+<h1 id="How_to_use"><a href="#How_to_use" class="headerlink" title="How to use"></a>How to use</h1><h2 id="u81EA_u5B9A_u4E49_BlockCanaryContext__u4E0A_u4E0B_u6587"><a href="#u81EA_u5B9A_u4E49_BlockCanaryContext__u4E0A_u4E0B_u6587" class="headerlink" title="自定义 BlockCanaryContext 上下文"></a>自定义 BlockCanaryContext 上下文</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppBlockCanaryContext</span> <span class="keyword">extends</span> <span class="title">BlockCanaryContext</span> </span>&#123;</span><br><span class="line">    <span class="comment">// override to provide context like app qualifier, uid, network type, block threshold, log save path</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// this is default block threshold, you can set it by phone's performance</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getConfigBlockThreshold</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">500</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if set true, notification will be shown, else only write log file</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isNeedDisplay</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> BuildConfig.DEBUG;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// path to save log file</span></span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getLogPath</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"/blockcanary/performance"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>BlockCanaryContext</code>中主要提供一个配置参数和客户端信息，提供给日志使用，需要自定义实现。</p>
+<h2 id="u5728_Application__u4E2D_u521D_u59CB_u5316_u5E76_u542F_u52A8"><a href="#u5728_Application__u4E2D_u521D_u59CB_u5316_u5E76_u542F_u52A8" class="headerlink" title="在 Application 中初始化并启动"></a>在 Application 中初始化并启动</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApplication</span> <span class="keyword">extends</span> <span class="title">Application</span> </span>&#123;</span><br><span class="line">    <span class="annotation">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Do it on main process</span></span><br><span class="line">        BlockCanary.install(<span class="keyword">this</span>, <span class="keyword">new</span> AppBlockCanaryContext()).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你的应用是多进程的实现，初始化时一定要留意。如果应用中将执行耗时操作的<code>Service</code>配置到单独的进程中，那在<code>Application</code>中初始化时需要考虑清楚是否在<code>Service</code>的进程中初始化，因为一般的<code>Service</code>的操作也是在主线程执行的，不应该算在<code>UI</code>界面的性能考虑范围内。</p>
+<h1 id="u57FA_u672C_u539F_u7406"><a href="#u57FA_u672C_u539F_u7406" class="headerlink" title="基本原理"></a>基本原理</h1><h2 id="u80E1_u514B_logging"><a href="#u80E1_u514B_logging" class="headerlink" title="胡克 logging"></a>胡克 logging</h2><p>在<code>Looper</code>的<code>loop</code>方法中有如下代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Printer logging = me.mLogging;</span><br><span class="line"><span class="keyword">if</span> (logging != <span class="keyword">null</span>) &#123;</span><br><span class="line">	logging.println(<span class="string">"&gt;&gt;&gt;&gt;&gt; Dispatching to "</span> + msg.target + <span class="string">" "</span> +</span><br><span class="line">			msg.callback + <span class="string">": "</span> + msg.what);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">msg.target.dispatchMessage(msg);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (logging != <span class="keyword">null</span>) &#123;</span><br><span class="line">	logging.println(<span class="string">"&lt;&lt;&lt;&lt;&lt; Finished to "</span> + msg.target + <span class="string">" "</span> + msg.callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>dispatchMessage</code>方法调用前后，有一个打印的日志的方法可以<code>hook</code>，<code>BlockCanary</code>就是利用这个方式实现的。<br>具体实现就是获取主线程的消息处理耗时，与自定义<code>BlockCanaryContext</code>中配置的<code>BlockThreshold</code>做比较，如果超过阻塞伐值，就调用<code>BlockListener</code>获取设备和应用的环境信息。</p>
+<h2 id="u5982_u4F55_u80E1_u514B"><a href="#u5982_u4F55_u80E1_u514B" class="headerlink" title="如何胡克"></a>如何胡克</h2><p>接下来看看<code>BlockCanary</code>是怎么样胡克的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">println</span><span class="params">(String x)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!mStartedPrinting) &#123;</span><br><span class="line">		mStartTimeMillis = System.currentTimeMillis();</span><br><span class="line">		mStartThreadTimeMillis = SystemClock.currentThreadTimeMillis();</span><br><span class="line">		mStartedPrinting = <span class="keyword">true</span>;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="keyword">final</span> <span class="keyword">long</span> endTime = System.currentTimeMillis();</span><br><span class="line">		mStartedPrinting = <span class="keyword">false</span>;</span><br><span class="line">		<span class="keyword">if</span> (isBlock(endTime)) &#123;</span><br><span class="line">			notifyBlockEvent(endTime);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>dispatchMessage</code>之前，会调用<code>println</code>方法，记录下当前系统时间，当前线程运行时间，后面判断<code>block</code>时会用到。<br>因为在<code>Looper</code>的<code>loop</code>方法的<code>dispatchMessage</code>前后都有调用<code>println</code>方法，这里加了一个标志位做判断。确认<code>block</code>之后，就回调<code>BlockEvent</code>。</p>
+<h2 id="Block__u901A_u77E5"><a href="#Block__u901A_u77E5" class="headerlink" title="Block 通知"></a>Block 通知</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">notifyBlockEvent</span><span class="params">(<span class="keyword">final</span> <span class="keyword">long</span> endTime)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">long</span> startTime = mStartTimeMillis;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">long</span> startThreadTime = mStartThreadTimeMillis;</span><br><span class="line">	<span class="keyword">final</span> <span class="keyword">long</span> endThreadTime = SystemClock.currentThreadTimeMillis();</span><br><span class="line">	BlockCanaryContext.get().getWriteLogFileThreadHandler().post(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">		<span class="annotation">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			mBlockListener.onBlockEvent(startTime, endTime, startThreadTime, endThreadTime);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="u4FE1_u606F_u6536_u96C6_u548C_u540E_u7EED_u5904_u7406"><a href="#u4FE1_u606F_u6536_u96C6_u548C_u540E_u7EED_u5904_u7406" class="headerlink" title="信息收集和后续处理"></a>信息收集和后续处理</h2><p>在非主线程回调<code>onBlockEvent</code>方法，做一些信息收集，日志上传，提示的工作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"> <span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBlockEvent</span><span class="params">(<span class="keyword">long</span> realTimeStart, <span class="keyword">long</span> realTimeEnd, <span class="keyword">long</span> threadTimeStart, <span class="keyword">long</span> threadTimeEnd)</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 查询这段时间内的线程堆栈调用情况，CPU使用情况</span></span><br><span class="line">	ArrayList&lt;String&gt; threadStackEntries = mThreadStackSampler.getThreadStackEntries(realTimeStart, realTimeEnd);</span><br><span class="line">	<span class="comment">// Log.d("BlockCanary", "threadStackEntries: " + threadStackEntries.size());</span></span><br><span class="line">	<span class="keyword">if</span> (threadStackEntries.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">		Block block = Block.newInstance()</span><br><span class="line">				.setMainThreadTimeCost(realTimeStart, realTimeEnd, threadTimeStart, threadTimeEnd)</span><br><span class="line">				.setCpuBusyFlag(mCpuSampler.isCpuBusy(realTimeStart, realTimeEnd))</span><br><span class="line">				.setRecentCpuRate(mCpuSampler.getCpuRateInfo())</span><br><span class="line">				.setThreadStackEntries(threadStackEntries)</span><br><span class="line">				.flushString();</span><br><span class="line">		LogWriter.saveLooperLog(block.toString());</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (BlockCanaryContext.get().isNeedDisplay()) &#123;</span><br><span class="line">			Context context = BlockCanaryContext.get().getContext();</span><br><span class="line">			PendingIntent pendingIntent = DisplayBlockActivity.createPendingIntent(context, block.timeStart);</span><br><span class="line">			String contentTitle = context.getString(R.string.block_canary_class_has_blocked, block.timeStart);</span><br><span class="line">			String contentText = context.getString(R.string.block_canary_notification_message);</span><br><span class="line">			BlockCanary.<span class="keyword">this</span>.notify(contentTitle, contentText, pendingIntent);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>获取<code>CPU</code>信息，线程栈信息，保存到日志文件中，展示到界面上。</p>
+<p>在<code>CpuSampler</code>中，每间隔一秒钟去读取<code>/proc/stat</code>和<code>/proc/{pid}/stat</code>中的信息进行分析，获取系统<code>CPU</code>使用情况，和当前进程的<code>CPU</code>使用情况。在<code>ThreadStackSampler</code>中每隔三秒去收集一次线程的调用栈。</p>
+<h2 id="u603B_u7ED3"><a href="#u603B_u7ED3" class="headerlink" title="总结"></a>总结</h2><p>思路很新颖，实际的使用结果还是需要在项目中实践之后才能体会到。另外就是时间伐值的设置问题，不同的设备性能不一样，怎么样去控制伐值有点难把握。在<code>GitHub</code>上看到有人建议使用<code>Choreographer</code>去检测跳帧的情况，我觉得应该也是一个不错的思路，有时间的话好好研究一下。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Opensource/" rel="tag">#Opensource</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/15/adb-commands/" rel="next" title="Adb commands">
+                <i class="fa fa-chevron-left"></i> Adb commands
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars2.githubusercontent.com/u/3899178?v=3&s=460"
+               alt="Liz" />
+          <p class="site-author-name" itemprop="name">Liz</p>
+          <p class="site-description motion-element" itemprop="description">路漫漫其修远兮，吾将上下而求索</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">categories</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">2</span>
+              <span class="site-state-item-name">tags</span>
+              </a>
+          </div>
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        <div class="motion-element">
+          <div class="copyright">
+            
+            &copy;  2015 - 
+            <span itemprop="copyrightYear">2016</span>
+            <span class="with-love">
+              <i class="icon-next-heart fa fa-heart"></i>
+            </span>
+            <span class="author" itemprop="copyrightHolder">Liz</span>
+          </div>
+
+          <div class="powered-by">
+            Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+          </div>
+
+          <div class="theme-info">
+            Theme -
+            <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+              NexT.Muse
+            </a>
+          </div>
+        </div>
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#u4EE3_u7801_u7ED3_u6784"><span class="nav-number">1.</span> <span class="nav-text">代码结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How_to_use"><span class="nav-number">2.</span> <span class="nav-text">How to use</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u81EA_u5B9A_u4E49_BlockCanaryContext__u4E0A_u4E0B_u6587"><span class="nav-number">2.1.</span> <span class="nav-text">自定义 BlockCanaryContext 上下文</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5728_Application__u4E2D_u521D_u59CB_u5316_u5E76_u542F_u52A8"><span class="nav-number">2.2.</span> <span class="nav-text">在 Application 中初始化并启动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#u57FA_u672C_u539F_u7406"><span class="nav-number">3.</span> <span class="nav-text">基本原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#u80E1_u514B_logging"><span class="nav-number">3.1.</span> <span class="nav-text">胡克 logging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u5982_u4F55_u80E1_u514B"><span class="nav-number">3.2.</span> <span class="nav-text">如何胡克</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Block__u901A_u77E5"><span class="nav-number">3.3.</span> <span class="nav-text">Block 通知</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u4FE1_u606F_u6536_u96C6_u548C_u540E_u7EED_u5904_u7406"><span class="nav-number">3.4.</span> <span class="nav-text">信息收集和后续处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#u603B_u7ED3"><span class="nav-number">3.5.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2015 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="icon-next-heart fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Liz</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/font.js?v=0.5.0"></script>
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

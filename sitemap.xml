@@ -7,11 +7,6 @@
   </url>
   
   <url>
-    <loc>http://copyleft.me/2015/12/11/adb-client-server-adbd/</loc>
-    <lastmod>2016-01-20T13:53:22.000Z</lastmod>
-  </url>
-  
-  <url>
     <loc>http://copyleft.me/2015/12/14/how-adb-works/</loc>
     <lastmod>2016-01-20T13:53:22.000Z</lastmod>
   </url>
@@ -23,6 +18,11 @@
   
   <url>
     <loc>http://copyleft.me/2015/12/15/adb-commands/</loc>
+    <lastmod>2016-01-20T13:53:22.000Z</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://copyleft.me/2015/12/11/adb-client-server-adbd/</loc>
     <lastmod>2016-01-20T13:53:22.000Z</lastmod>
   </url>
   
